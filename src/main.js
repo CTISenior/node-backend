@@ -27,7 +27,7 @@ app.use(apiLimiter); // apply rate limiter to all requests
 
 
 //Routers
-const device_router = require('./Routes/deviceRouter')
+const device_router = require('./routes/deviceRouter')
 
 
 app.use((request, response, next) => {
