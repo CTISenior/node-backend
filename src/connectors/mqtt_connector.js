@@ -11,9 +11,9 @@ const client = mqtt.connect(connectUrl, {
   clientId,
   clean: true,
   connectTimeout: 4000,
-  username: 'username',
-  password: 'passwd',
   reconnectPeriod: 1000,
+  username: 'username',
+  password: 'password',
 })
 
 module.exports = client
