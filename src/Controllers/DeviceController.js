@@ -1,88 +1,106 @@
 "use strict";
 
 const pool = require('../connectors/pgsql_connector');
+const kafkaAdmin = require('../utils/kafkaAdmin');
+
+const tenantID = 1;
+const buildingID = 1;
 
 
 //exports.getDevices = function(req, res) {}
-const getDevices = (req, res) => {
-    pool.query(
-      `SELECT * FROM devices ORDER BY "id" ASC`, (error, results) => {
-      if (error) {
-        res.status(400).json(error)
-        return;
-        //throw error
-      }
+const getAllDevices = (req, res) => {
+  pool.query(
+    'SELECT * FROM devices WHERE tenant_id=$1 AND building_id=$2 ORDER BY created_at ASC',
+    [tenantID, buildingID],
+    (error, result) => {
 
-      res.status(200).json(results.rows)
-    })
+    if (error) 
+    {
+      return res.status(400).json(error);
+      //return res.status(400).send('error!');
+    }
+
+    return res.status(200).json(result.rows);
+  })
 };
 
 const getDevice = (req, res) => {
-    const id = parseInt(req.params.id)
+  const id = parseInt(req.params.id)
 
-    pool.query(
-      `SELECT * FROM devices WHERE "id" = $1`, [id], (error, results) => {
-      if (error) {
-        res.status(404).json(error)
-        return;
-        //throw error
-      }
+  pool.query(
+    'SELECT * FROM devices WHERE id=$1', [id], (error, result) => {
 
-      res.status(200).json(results.rows)
-    })
+    if (error) 
+    {
+      return res.status(404).json(error);
+    }
+
+    return res.status(200).json(result.rows);
+  })
 };
 
 
 const insertDevice = (req, res) => {
-    const { sn, name, protocol, type, keys } = req.body
+  const { sn, name, protocol, type, keys } = req.body
 
-    pool.query(
-      `INSERT INTO devices (sn, name, protocol, type, keys) VALUES ($1, $2, $3, $4, $5)`,
-      [sn, name, protocol, type, keys],
-      (error, results) => {
-      if (error) {
-        res.status(401).json(error)
-        return;
-        //throw error
-      }//403, 406
-     
-      res.status(201).send(`Device inserted successfully`)
-      //create kafka topic
-    })
+  pool.query(
+    'INSERT INTO devices (sn, name, protocol, type, keys) VALUES ($1, $2, $3, $4, $5)',
+    [sn, name, protocol, type, keys],
+    (error, result) => {
+
+    if (error) 
+    {
+      return res.status(401).json(error); // .. 403, 406
+    }
+    
+      //create kafka topic -> SN
+    kafkaAdmin.createTopic(sn)
+      .then(result => console.log(result))
+      .catch(error => console.log(error));
+    
+    return res.status(201).send('Device inserted successfully');
+  })
 };
 
+
 const updateDevice = (req, res) => {
-    const id = parseInt(req.params.id)
-    const { name, type, keys } = req.body
+  const id = parseInt(req.params.id)
+  const { name, type, keys } = req.body
+  //const updated_at = Date.now()
 
-    pool.query(
-      `UPDATE devices SET "name" = $1, "type" = $2, "keys" = $3 WHERE "id" = $4`,
-      [name, type, keys, id],
-      (error, results) => {
-        if (error) {
-          res.status(401).json(error)
-          return;
-          //throw error
-        }
+  pool.query(
+    'UPDATE devices SET name=$1, type=$2, keys=$3 WHERE id = $4',
+    [name, type, keys, id],
+    (error, result) => {
 
-      res.status(200).send(`Device updated successfully [ID: ${id}]`)
-      })
+    if (error) 
+    {
+      return res.status(401).json(error);
+    }
+
+    return res.status(200).send(`Device updated successfully [ID: ${id}]`);
+  })
 };
 
 const deleteDevice = (req, res) => {
-    const id = parseInt(req.params.id)
+  const id = parseInt(req.params.id)
+  const sn = req.params.sn
+  
+  pool.query(
+    'DELETE FROM devices WHERE id=$1', [id], (error, result) => {
 
-    pool.query(
-      `DELETE * FROM devices WHERE "id" = $1`, [id], (error, results) => {
-      if (error) {
-        res.status(400).json(error)
-        return;
-        //throw error
-      }
+    if (error) 
+    {
+      return res.status(400).json(error);
+    }
 
-      res.status(200).send(`Device deleted successfully [ID: ${id}]`)
-      //delete kafka topic
-    })
+    //delete kafka topic -> SN
+    kafkaAdmin.deleteTopic(sn)
+      .then(result => console.log(result))
+      .catch(error => console.log(error));
+    
+    return res.status(200).send(`Device deleted successfully [ID: ${id}]`);
+  })
 };
 
 
@@ -96,9 +114,9 @@ function authenticateDevice(device, token){
 
 
 module.exports = {
-    getDevices,
-    getDevice,
-    insertDevice,
-    updateDevice,
-    deleteDevice
+  getAllDevices,
+  getDevice,
+  insertDevice,
+  updateDevice,
+  deleteDevice
 };
