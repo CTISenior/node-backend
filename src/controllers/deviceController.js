@@ -58,7 +58,7 @@ const insertDevice = (req, res) => {
       .then(result => console.log(result))
       .catch(error => console.log(error));
     
-    return res.status(201).send('Device inserted successfully');
+    return res.status(201).json(result);
   })
 };
 
@@ -78,7 +78,7 @@ const updateDevice = (req, res) => {
       return res.status(401).json(error);
     }
 
-    return res.status(200).send(`Device updated successfully [ID: ${id}]`);
+    return res.status(200).json(result);
   })
 };
 
@@ -99,7 +99,7 @@ const deleteDevice = (req, res) => {
       .then(result => console.log(result))
       .catch(error => console.log(error));
     
-    return res.status(200).send(`Device deleted successfully [ID: ${id}]`);
+    return res.status(200).json(result);
   })
 };
 
