@@ -2,7 +2,7 @@
 
 //const device_router = 
 const router = require('express').Router();
-const deviceController = require('../Controllers/DeviceController');
+const deviceController = require('../controllers/deviceController');
 const DEVICE_ENDPOINT = '/devices'
 
 //import verifyAuth from '../middlewares/verifyAuth';
