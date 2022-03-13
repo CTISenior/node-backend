@@ -1,6 +1,6 @@
--- Table: public.Devices
+-- Table: public.devices
 
--- DROP TABLE IF EXISTS public."Devices";
+-- DROP TABLE IF EXISTS public."devices";
 
 CREATE TABLE IF NOT EXISTS public."devices"
 (
@@ -12,19 +12,18 @@ CREATE TABLE IF NOT EXISTS public."devices"
     keys text[] COLLATE pg_catalog."default" NOT NULL,
     description character varying(255) COLLATE pg_catalog."default",
     access_token uuid,
-    building character varying(255) NOT NULL COLLATE pg_catalog."default" DEFAULT 'MainBulding'::character varying,
-    owner character varying(255) NOT NULL COLLATE pg_catalog."default" DEFAULT 'admin'::character varying,
-    creator character varying(255) COLLATE pg_catalog."default" DEFAULT 'admin'::character varying,
+    tenant_id integer NOT NULL DEFAULT 1,
     building_id integer NOT NULL DEFAULT 1,
-    timestamptz timestamp with time zone NOT NULL DEFAULT NOW(),
+    owner character varying(255) NOT NULL COLLATE pg_catalog."default" DEFAULT 'admin'::character varying,
+    timestamptz timestamp with time zone DEFAULT NOW(),
     created_at time without time zone DEFAULT NOW(),
-    updated_at time without time zone DEFAULT NOW(),
+    updated_at time without time zone,
     status boolean DEFAULT true,
-    CONSTRAINT "Devices_pkey" PRIMARY KEY ("ID"),
+    CONSTRAINT "devices_pkey" PRIMARY KEY ("id"),
     CONSTRAINT sn UNIQUE (sn)
 )
 
 TABLESPACE pg_default;
 
-ALTER TABLE IF EXISTS public."Devices"
+ALTER TABLE IF EXISTS public."devices"
     OWNER to iotwin;
