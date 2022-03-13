@@ -1,22 +1,20 @@
 ---
 iotwin_backend:
   host: 127.0.0.1
-  kafka_brokers:
-  - kafka1
-  - kafka2
-  - kafka3
   endpoint: '/api/v1'
 
-  pgsql_host: 127.0.0.1
-  pgsql_port: 5432
-  pgsql_user:
-  pgsql_passwod:
-
-  kafka_host:
   kafka_brokers:
+  - 'localhost:9091'
+  - 'localhost:9092'
+  - 'localhost:9093'
+  
 
-  mqtt_host:
-  mqtt_port:
-  mqtt_user:
-  mqtt_password:
-  mqtt_topic:
+  pgsql_port: 5432
+  pgsql_user: 'username"'
+  pgsql_passwod: 'password'
+
+
+  mqtt_port: 1883
+  mqtt_user: 'username'
+  mqtt_password: 'password'
+  mqtt_topic: '/sensor/data'
