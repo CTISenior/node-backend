@@ -2,7 +2,6 @@ const { Kafka } = require('kafkajs')
 
 const clientId = "iotwin-kafka"
 const brokers = ["localhost:9091", "localhost:9092", "localhost:9093"]
-const topic = "testTopic"
 
 /*
 const { KAFKA_USERNAME: username, KAFKA_PASSWORD: password } = process.env
@@ -17,5 +16,6 @@ const kafka = new Kafka({
   //ssl,
   //sasl
 })
+
 
 module.exports = kafka
