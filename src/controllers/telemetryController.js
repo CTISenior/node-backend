@@ -5,14 +5,13 @@ const router = require("express").Router();
 const DEVICE_ENDPOINT = '/telemetry'
 
 const kafka = require('../connectors/kafka_connector');
-const consumer = kafka.consumer({ groupId: 'test-group' })
 const io = require('../services/socket');
 
 
-io.on('connection', (socket) => {
+io.on("connection", (socket) => {
 
     //receive message
-    socket.on("topicName", (arg) => {
+    socket.on("telemetry_topic", (arg) => {
         const topic = arg.toString();
 
         if(topic){
@@ -22,6 +21,7 @@ io.on('connection', (socket) => {
     });
 
     const consume = async (topic) => {
+        const consumer = kafka.consumer({ groupId: `test-group_${topic}` })
         await consumer.connect()
         await consumer.subscribe({ topic: topic, fromBeginning: false })
         await consumer.run({
@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
                     offset: message.offset,
                     value: message.value.toString(),
                 });
-                io.sockets.emit("telemetry", message.value.toString());
+                io.sockets.emit("telemetry_topic_message", message.value.toString());
             },
         })
     };
