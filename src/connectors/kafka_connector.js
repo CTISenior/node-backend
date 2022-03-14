@@ -9,13 +9,11 @@ const sasl = username && password ? { username, password, mechanism: 'plain' } :
 const ssl = !!sasl
 */
 
-const kafka = new Kafka({
+
+module.exports = new Kafka({
   clientId: clientId,
   brokers: brokers,
   //logLevel: logLevel.DEBUG,
   //ssl,
   //sasl
 })
-
-
-module.exports = kafka
