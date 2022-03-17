@@ -1,14 +1,16 @@
 "use strict";
 
 const pool = require('../connectors/pgsql_connector');
-const kafkaAdmin = require('../utils/kafkaAdmin');
+const kafkaAdmin = require('../utils/kafkaHelper');
 
 const tenantID = 1;
 const buildingID = 1;
 
 
-//exports.getDevices = function(req, res) {}
+//exports.getAllDevices = function(req, res) {}
 const getAllDevices = (req, res) => {
+
+  //////////dbHelper.getAllDevices(...);
   pool.query(
     'SELECT * FROM devices WHERE tenant_id=$1 AND building_id=$2 ORDER BY created_at ASC',
     [tenantID, buildingID],
