@@ -45,4 +45,4 @@ app.listen(PORT, function(err){
 
 
 const io = require("./controllers/socketController")
-const telemetry = require("./controllers/telemetryController2")
+const telemetry = require("./controllers/telemetryController")
