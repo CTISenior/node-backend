@@ -1,30 +1,27 @@
 "use strict";
 
 const client = require('../connectors/mqtt_connector');
-const topic = '/sensor/data'
+
+const kafkaAdmin = require('./kafkaAdmin');
+
+const mqtt_topic = '/sensor/data'
 
 
-function subscribe()
-{
-    client.on('connect', () => {
-        console.log('Connected to MQTT Broker')
-        client.subscribe([topic], () => {
-          console.log(`Subscribe to topic '${topic}'`)
-        })
-      })
-}
 
-function get_messages()
-{
-    client.on('message', (topic, payload) => {
-        console.log('Received Message:', topic, payload.toString())
+
+client.on('connect', () => {
+    console.log('Connected to MQTT Broker')
+    client.subscribe([mqtt_], () => {
+        console.log(`Subscribe to topic '${topic}'`)
     })
-}
+})
 
 
-function main()
-{
-    subscribe()
-    get_messages()
-}
-main()
+client.on('message', (topic, payload) => {
+    console.log('Received Message:', topic, payload.toString())
+
+
+
+    //write into kafka with topic-> SN
+    //write into "device_history" table
+})
