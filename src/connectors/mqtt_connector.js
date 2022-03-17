@@ -3,12 +3,12 @@
 const mqtt = require('mqtt');
 
 const host = '127.0.0.1'
-const port = '11883'
-const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
+const port = '1883'
+const clientID = `mqtt_${Math.random().toString(16).slice(3)}`
 const connectUrl = `mqtt://${host}:${port}`
 
 module.exports = mqtt.connect(connectUrl, {
-  clientId,
+  clientID,
   clean: true,
   connectTimeout: 4000,
   reconnectPeriod: 1000,
