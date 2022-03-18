@@ -89,7 +89,9 @@ const deleteDevice = (req, res) => {
   const sn = req.params.sn
   
   pool.query(
-    'DELETE FROM devices WHERE id=$1', [id], (error, result) => {
+    'DELETE FROM devices WHERE id=$1', 
+    [id], 
+    (error, result) => {
 
     if (error) 
     {
