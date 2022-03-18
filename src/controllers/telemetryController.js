@@ -17,7 +17,6 @@ mqtt_client.on('connect', () => {
 
 //Promise
 mqtt_client.on('message', (mqtt_topic, payload) => {
-    console.log('Received Message:', mqtt_topic, payload.toString())
     const obj = JSON.parse(payload.toString())
     const sn = Object.keys(obj)[0].toString()
     const telemetry = JSON.stringify(Object.values(obj)[0][0].values)
@@ -27,10 +26,13 @@ mqtt_client.on('message', (mqtt_topic, payload) => {
 
     //write telemetry into kafkaTopic
     kafkaHelper.writeTelemetry(sn, telemetry)
-        .then(result => console.log(result))
+        .then(
+            dbHelper.insertTelemetry(sn, telemetry, timestamp),
+            result => console.log(result)
+        )
         .catch(error => console.log(error));
     
     //insert telemetry into "device_telemetries" db table
-    dbHelper.insertTelemetry(sn, telemetry, timestamp);
+    
 
 })
