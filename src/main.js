@@ -3,8 +3,11 @@
 const express = require('express')
 const RateLimit = require('express-rate-limit');
 const cors = require("cors")
-const device_router = require('./routes/deviceRouter')
+
+
 const app = express()
+const device_router = require('./routes/deviceRouter')
+const alert_router = require('./routes/alertRouter')
 
 const PORT = 4000
 const ENDPOINT = '/api/v1'
@@ -30,8 +33,11 @@ app.use((request, response, next) => {
   next();
 });
 
-//routers
-app.use(ENDPOINT, device_router);
+
+
+//use routers
+app.use(ENDPOINT, device_router); //before device_router -> middleware
+app.use(ENDPOINT, alert_router);
 
 
 

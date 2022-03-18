@@ -11,11 +11,12 @@ const buildingID = 1;
 
 //exports.getAlert = function(req, res) {}
 const getAlert = (req, res) => {
-  const id = parseInt(req.params.id)
+  const id = req.params.id
 
+  console.log(id)
   //////////dbHelper.getAlert(...);
   pool.query(
-    'SELECT * FROM devices_alerts WHERE sn=$1', 
+    `SELECT * FROM device_alerts WHERE sn=$1`, 
     [id], 
     (error, result) => {
 

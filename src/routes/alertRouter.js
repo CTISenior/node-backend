@@ -2,7 +2,7 @@
 
 //const alert_router = 
 const router = require('express').Router();
-const deviceController = require('../controllers/alertController');
+const alertController = require('../controllers/alertController');
 const ENDPOINT = '/alerts'
 
 //import verifyAuth from '../middlewares/verifyAuth';
@@ -10,7 +10,7 @@ const ENDPOINT = '/alerts'
 
 
 //GET
-router.get(`${ENDPOINT}/:id`, deviceAlert.getAlert);
+router.get(`${ENDPOINT}/:id`, alertController.getAlert);
 
 
 module.exports = router;
