@@ -10,7 +10,8 @@ const PORT = 4000
 const ENDPOINT = '/api/v1'
 
 const corsOptions = {
-  origin: `http://localhost:${PORT}`
+  // origin: `http://localhost:${PORT}`
+  origin: `*`
 };
 const apiLimiter = RateLimit({
 	windowMs: 10 * 60 * 1000, // 10 minutes
