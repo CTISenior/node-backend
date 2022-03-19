@@ -28,7 +28,7 @@ const apiLimiter = RateLimit({
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors(corsOptions));
-app.use(apiLimiter); // apply rate limiter to all requests
+//app.use(apiLimiter); // apply rate limiter to all requests
 app.use((request, response, next) => {
   next();
 });
