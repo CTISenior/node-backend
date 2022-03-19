@@ -10,7 +10,12 @@ const ENDPOINT = '/alerts'
 
 
 //GET
+router.get(`${ENDPOINT}`, alertController.getAllAlerts);
 router.get(`${ENDPOINT}/:id`, alertController.getAlert);
+
+
+//DELETE
+router.delete(`${ENDPOINT}/:id`, alertController.deleteAlert);
 
 
 module.exports = router;

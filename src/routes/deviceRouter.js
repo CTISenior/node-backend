@@ -15,10 +15,10 @@ router.get(`${DEVICE_ENDPOINT}/:id`, deviceController.getDevice);
 
 //POST
 router.post(`${DEVICE_ENDPOINT}`, deviceController.insertDevice);
-router.post(`${DEVICE_ENDPOINT}/:id`, deviceController.updateDevice);
+//router.post(`${DEVICE_ENDPOINT}/:id`, deviceController.updateDevice);
 
 //PUT
-//router.put(`${DEVICE_ENDPOINT}/:id`, deviceController.updateDevice);
+router.put(`${DEVICE_ENDPOINT}/:id`, deviceController.updateDevice);
 
 //DELETE
 router.delete(`${DEVICE_ENDPOINT}/:id/:sn`, deviceController.deleteDevice);
