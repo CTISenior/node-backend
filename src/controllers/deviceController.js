@@ -18,7 +18,7 @@ const getAllDevices = (req, res) => {
 
     if (error) 
     {
-      return res.status(400).json(error);
+      return res.status(400).send(`Cannot get all devices!`)
       //return res.status(400).send('error!');
     }
 
@@ -34,7 +34,7 @@ const getDevice = (req, res) => {
 
     if (error) 
     {
-      return res.status(404).json(error);
+      return res.status(400).send(`Cannot get the devices!`)
     }
 
     return res.status(200).json(result.rows);
@@ -43,16 +43,16 @@ const getDevice = (req, res) => {
 
 
 const insertDevice = (req, res) => {
-  const { sn, name, protocol, type, keys } = req.body
+  const { sn, name, protocol, model, type, description } = req.body
 
   pool.query(
-    'INSERT INTO devices (sn, name, protocol, type, keys) VALUES ($1, $2, $3, $4, $5)',
-    [sn, name, protocol, type, keys],
+    'INSERT INTO devices (sn, name, protocol, model, type, description) VALUES ($1, $2, $3, $4, $5, $6)',//returning *;
+    [sn, name, protocol, model, type, description],
     (error, result) => {
 
     if (error) 
     {
-      return res.status(401).json(error); // .. 403, 406
+      return res.status(400).send(`New device could not be inserted!`)
     }
     
       //create kafka topic -> SN
@@ -60,27 +60,27 @@ const insertDevice = (req, res) => {
       .then(result => console.log(result))
       .catch(error => console.log(error));
     
-    return res.status(201).json(result);
+    return res.status(201).send(`New device inserted successfully`)
   })
 };
 
 
 const updateDevice = (req, res) => {
   const id = parseInt(req.params.id)
-  const { name, type, keys } = req.body
+  const { name, protocol, model, type, description } = req.body
   //const updated_at = Date.now()
 
   pool.query(
-    'UPDATE devices SET name=$1, type=$2, keys=$3 WHERE id = $4',
-    [name, type, keys, id],
+    'UPDATE devices SET name=$1, protocol=$2 ,model=$3, type=$4, description=$5 WHERE id = $6',//returning *;
+    [name, protocol, model, type, description, id],
     (error, result) => {
 
     if (error) 
     {
-      return res.status(401).json(error);
+      return res.status(400).send(`Device could not be updated! | ID: ${id}`)
     }
 
-    return res.status(200).json(result);
+    return res.status(201).send(`Device updated successfully | ID: ${id}`)
   })
 };
 
@@ -103,7 +103,7 @@ const deleteDevice = (req, res) => {
       .then(result => console.log(result))
       .catch(error => console.log(error));
     
-    return res.status(200).json(result);
+    return res.status(201).send(`Device updated successfully | ID: ${id}`)
   })
 };
 
