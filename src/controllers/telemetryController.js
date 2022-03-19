@@ -27,32 +27,27 @@ mqtt_client.on('message', (mqtt_topic, payload) => {
 
     //write telemetry into kafkaTopic
     kafkaHelper.writeTelemetry(sn, telemetry)
-    .then(
-        //insert telemetry into "device_telemetries" db table
-        dbHelper.insertTelemetry(sn, telemetry, timestamp)
-    )
-    .then(
-        result => console.log(result)
-    )
-    .catch(error => console.log(error));
-    
+        .then(
+            //insert telemetry into "device_telemetries" db table
+            dbHelper.insertTelemetry(sn, telemetry, timestamp)
+        )
+        .then(
+            result => console.log(result)
+        )
+        .catch(error => console.log(error));
 
 
     check_telemetry(telemetry)
-    .then(value =>
-        {
-            console.log(value)
-        })
-    .catch(value =>
-        {
-            console.log(value)
-            dbHelper.insertAlert(sn, value[0] ,"warning", value[1], timestamp)
-        });
+        .then(value =>
+            {
 
-    //insert telemetry into "device_telemetries" db table
+            })
+        .catch(value =>
+            {
+                dbHelper.insertAlert(sn, value[0] , "warning", `${sn} - ${value[1]}`, timestamp)
+            });
 
 })
-
 
 
 const check_telemetry = (telemetry) =>

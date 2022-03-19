@@ -7,6 +7,8 @@ const DEVICE_ENDPOINT = '/telemetry'
 const kafka = require('../connectors/kafka_connector');
 const io = require('../services/socket');
 
+var currTopic ="";
+var currConsumer=""
 
 io.on("connection", (socket) => {
 
@@ -16,24 +18,32 @@ io.on("connection", (socket) => {
 
         if(topic){
             console.log(`connection: ${topic}`)
+            if(currTopic != topic){
+                currTopic = topic;
+                consumer = kafka.consumer({ groupId: `test-group_${topic}` });
+                //consumer.connect()
+                //consumer.subscribe({ topic: topic, fromBeginning: false })
+            }
             consume(topic).catch(console.error)
         }
     });
 
     const consume = async (topic) => {
-        const consumer = kafka.consumer({ groupId: `test-group_${topic}` })
         await consumer.connect()
         await consumer.subscribe({ topic: topic, fromBeginning: false })
-        await consumer.run({
+        setInterval(function(){
+        consumer.run({
             eachMessage: async ({ topic, partition, message }) => {
                 console.log({
                     partition,
                     offset: message.offset,
                     value: message.value.toString(),
                 });
-                io.sockets.emit("telemetry_topic_message", message.value.toString());
+                
+                    io.sockets.emit("telemetry_topic_message", message.value.toString());
             },
         })
+    },2000);
     };
 });
 
