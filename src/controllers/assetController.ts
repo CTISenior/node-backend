@@ -75,12 +75,12 @@ export const updateAsset = (req, res) => {
       if (error) {
         return res
           .status(400)
-          .send(`[ERROR] Asset could not be updated! | ID: ${id}`);
+          .send(`[ERROR] Asset could not be updated!`);
       }
 
       return res
         .status(200)
-        .send(`Asset updated successfully | ID: ${id}`);
+        .send(`Asset updated successfully`);
     },
   );
 };
@@ -92,11 +92,11 @@ export const deleteAsset = (req, res) => {
     if (error) {
       return res
         .status(400)
-        .send(`[ERROR] Asset could not be deleted! | ID: ${id}`);
+        .send(`[ERROR] Asset could not be deleted!`);
     }
 
     return res
       .status(200)
-      .send(`Asset deleted successfully | ID: ${id}`);
+      .send(`Asset deleted successfully`);
   });
 };

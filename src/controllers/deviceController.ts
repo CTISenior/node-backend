@@ -89,12 +89,12 @@ export const updateDevice = (req, res) => {
       if (error) {
         return res
           .status(400)
-          .send(`[ERROR] Device could not be updated! | ID: ${id}`);
+          .send(`[ERROR] Device could not be updated!`);
       }
 
       return res
         .status(200)
-        .send(`Device updated successfully | ID: ${id}`);
+        .send(`Device updated successfully`);
     },
   );
 };
@@ -108,7 +108,7 @@ export const deleteDevice = (req, res) => {
     if (error) {
       return res
         .status(400)
-        .send(`[ERROR] Device could not be deleted! | ID: ${id}`);
+        .send(`[ERROR] Device could not be deleted!`);
     }
 
     // delete kafka topic -> SN
@@ -122,6 +122,6 @@ export const deleteDevice = (req, res) => {
 
     return res
       .status(200)
-      .send(`Device deleted successfully | ID: ${id}`);
+      .send(`Device deleted successfully`);
   });
 };

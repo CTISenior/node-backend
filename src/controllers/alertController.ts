@@ -54,12 +54,12 @@ export const update_alert = (req, res) => {
       if (error) {
         return res
           .status(400)
-          .send(`[ERROR] Alert status could not be updated! | ID: ${id}`);
+          .send(`[ERROR] Alert status could not be updated!`);
       }
 
       return res
         .status(200)
-        .send(`Alert status updated successfully | ID: ${id}`);
+        .send(`Alert status updated successfully`);
     },
   );
 };
@@ -73,7 +73,7 @@ export const deleteAlert = (req, res) => {
     if (error) {
       return res
         .status(400)
-        .send(`[ERROR] Alert could not be deleted! | ID: ${id}`);
+        .send(`[ERROR] Alert could not be deleted!`);
     }
 
     return res
