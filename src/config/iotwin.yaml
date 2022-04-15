@@ -1,20 +1,26 @@
 ---
 iotwin_backend:
   host: 127.0.0.1
-  endpoint: '/api/v1'
+  endpoint: "/api/v1"
+  backend_port: 4000
+  socket_port: 4001
 
   kafka_brokers:
-  - 'localhost:9091'
-  - 'localhost:9092'
-  - 'localhost:9093'
-  
+    - "localhost:9091"
+    - "localhost:9092"
+    - "localhost:9093"
 
-  pgsql_port: 5432
-  pgsql_user: 'username"'
-  pgsql_passwod: 'password'
+  crdb_host: localhost
+  crdb_port: 26257
+  crdb_user: "root"
+  crdb_passwod: ""
+  crdb_cert: ""
+  crdb_key: ""
 
-
+  mqtt_host: localhost
   mqtt_port: 1883
-  mqtt_user: 'username'
-  mqtt_password: 'password'
-  mqtt_topic: '/sensor/data'
+  mqtt_user: "username"
+  mqtt_password: "password"
+  mqtt_topic: "/sensor/data"
+  mqtt_cert: ""
+  mqtt_key: ""
