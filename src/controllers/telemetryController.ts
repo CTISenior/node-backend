@@ -53,13 +53,13 @@ export const getDeviceTelemetries = (req, res) => {
   const sorting = req.query.sorting ? req.query.sorting : 'DESC';
 
   pool.query(
-    `SELECT * FROM device_telemetries WHERE device_id=$1 AND (created_at > CURRENT_DATE - ${filter}) ORDER BY created_at DESC`, 
-    [ deviceId],
+    `SELECT * FROM device_telemetries WHERE device_id=$1 AND (created_at > CURRENT_DATE - ${parseInt(filter)}) ORDER BY created_at DESC`, 
+    [ deviceId ],
     (error, result) => {
       if (error) {
         return res
           .status(400)
-          .send(error);
+          .send('[ERROR] Cannot get the device telemetries!');
       }
 
       return res

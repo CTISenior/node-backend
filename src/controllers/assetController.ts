@@ -98,7 +98,7 @@ export const deleteAsset = (req, res) => {
       if (error || result.rowCount == 0) {
         return res
           .status(400)
-          .send(error);
+          .send(`The asset could not be deleted!`);
       }
 
       // null -> devices
