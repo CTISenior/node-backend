@@ -1,11 +1,13 @@
 import express from 'express';
 import RateLimit from 'express-rate-limit';
 import cors from 'cors';
+import { httpServer } from './services/socket';
+
+import tenantRouter from './routes/tenantRouter';
 import assetRouter from './routes/assetRouter';
 import deviceRouter from './routes/deviceRouter';
 import alertRouter from './routes/alertRouter';
 import telemetryRouter from './routes/telemetryRouter';
-import { httpServer } from './services/socket';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -38,19 +40,19 @@ app.use((request, response, next) => {
 });
 
 
-
-// use routers
+// routers
+app.use(ENDPOINT, tenantRouter); // -> middleware
 app.use(ENDPOINT, assetRouter); // -> middleware
 app.use(ENDPOINT, deviceRouter); // -> middleware
 app.use(ENDPOINT, alertRouter); // -> middleware
 app.use(ENDPOINT, telemetryRouter); // -> middleware
 
 
-
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.debug('Express listening on port: %d', PORT);
 });
+
 httpServer.listen(SOCKET_PORT, () => {
   console.log('Socket-io listening on port: %d', SOCKET_PORT);
 });

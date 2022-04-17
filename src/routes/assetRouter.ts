@@ -1,25 +1,29 @@
 // const asset_router =
 import * as assetController from '../controllers/assetController';
+import { getAssetDevices } from '../controllers/deviceController';
+import { getAssetAlerts } from '../controllers/alertController';
+import { getAssetTelemetries } from '../controllers/telemetryController';
 
 import express from 'express';
-const assetRouter = express.Router();
+const router = express.Router();
 
-const ASSET_ENDPOINT = '/assets';
+const ENDPOINT = '/assets';
 
-// import verifyAuth from '../middlewares/verifyAuth';
-// assetRouter.post('/assets', verifyAuth, assetController.insertAsset);
 
 // GET
-assetRouter.get(`${ASSET_ENDPOINT}`, assetController.getAllAssets);
-assetRouter.get(`${ASSET_ENDPOINT}/:id`, assetController.getAsset);
+router.get(`${ENDPOINT}/:id`, assetController.getAsset);
+router.get(`${ENDPOINT}/:assetId/devices`, getAssetDevices);
+router.get(`${ENDPOINT}/:assetId/alerts`, getAssetAlerts);
+router.get(`${ENDPOINT}/:assetId/telemetry`, getAssetTelemetries);
 
 // POST
-assetRouter.post(`${ASSET_ENDPOINT}`, assetController.insertAsset);
+router.post(`${ENDPOINT}`, assetController.insertAsset);
 
 // PUT
-assetRouter.put(`${ASSET_ENDPOINT}/:id`, assetController.updateAsset);
+router.put(`${ENDPOINT}/:id`, assetController.updateAsset);
 
 // DELETE
-assetRouter.delete(`${ASSET_ENDPOINT}/:id`, assetController.deleteAsset);
+router.delete(`${ENDPOINT}/:id`, assetController.deleteAsset);
 
-export default assetRouter;
+
+export default router;

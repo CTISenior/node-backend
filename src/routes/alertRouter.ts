@@ -1,19 +1,20 @@
 import * as alertController from '../controllers/alertController';
 
 import express from 'express';
-const alertRouter = express.Router();
+const router = express.Router();
 
 const ENDPOINT = '/alerts';
 
 // import verifyAuth from '../middlewares/verifyAuth';
-// alertRouter.post('/devices', verifyAuth, alertController.);
+// router.post('/devices', verifyAuth, alertController.);
 
 // GET
-alertRouter.get(`${ENDPOINT}`, alertController.getAllAlerts);
-alertRouter.get(`${ENDPOINT}/:id`, alertController.getAlert);
+
+// POST
+router.post(`${ENDPOINT}/:id`, alertController.updateAlertStatus);
 
 // DELETE
-alertRouter.delete(`${ENDPOINT}/:id`, alertController.deleteAlert);
-alertRouter.delete(`${ENDPOINT}/:sn`, alertController.deleteAllAlerts);
+router.delete(`${ENDPOINT}/:id`, alertController.deleteAlert);
 
-export default alertRouter;
+
+export default router;

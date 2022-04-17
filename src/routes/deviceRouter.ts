@@ -1,24 +1,29 @@
 import * as deviceController from '../controllers/deviceController';
+import { getDeviceAlerts, clearDeviceAlerts, deleteDeviceAlerts } from '../controllers/alertController';
+import { getDeviceTelemetries } from '../controllers/telemetryController';
 
 import express from 'express';
-const deviceRouter = express.Router();
+const router = express.Router();
 
-const DEVICE_ENDPOINT = '/devices';
+const ENDPOINT = '/devices';
 
 // import verifyAuth from '../middlewares/verifyAuth';
-// deviceRouter.post('/devices', verifyAuth, deviceController.insertDevice);
+// router.post('/devices', verifyAuth, deviceController.insertDevice);
 
 // GET
-deviceRouter.get(`${DEVICE_ENDPOINT}`, deviceController.getAllDevices);
-deviceRouter.get(`${DEVICE_ENDPOINT}/:id`, deviceController.getDevice);
+router.get(`${ENDPOINT}/:id`, deviceController.getDevice);
+router.get(`${ENDPOINT}/:deviceId/alerts`, getDeviceAlerts);
+router.get(`${ENDPOINT}/:deviceId/telemetry`, getDeviceTelemetries);
 
 // POST
-deviceRouter.post(`${DEVICE_ENDPOINT}`, deviceController.insertDevice);
+router.post(`${ENDPOINT}`, deviceController.insertDevice);
 
 // PUT
-deviceRouter.put(`${DEVICE_ENDPOINT}/:id`, deviceController.updateDevice);
+router.put(`${ENDPOINT}/:id`, deviceController.updateDevice);
+router.put(`${ENDPOINT}/:deviceId/alerts`, clearDeviceAlerts);
 
 // DELETE
-deviceRouter.delete(`${DEVICE_ENDPOINT}/:id/:sn`, deviceController.deleteDevice);
+router.delete(`${ENDPOINT}/:sn-:id`, deviceController.deleteDevice);
+router.delete(`${ENDPOINT}/:deviceId/alerts`, deleteDeviceAlerts);
 
-export default deviceRouter;
+export default router;

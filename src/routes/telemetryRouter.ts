@@ -1,14 +1,17 @@
 import * as telemetryController from '../controllers/telemetryController';
 
 import express from 'express';
-const telemetryRouter = express.Router();
+const router = express.Router();
 
 const ENDPOINT = '/telemetry';
 
-// import verifyAuth from '../middlewares/verifyAuth';
-// telemetryRouter.post('/telemetry', verifyAuth, telemetryController.);
 
 // GET
-telemetryRouter.get(`${ENDPOINT}/:sn`, telemetryController.getTelemetries);
 
-export default telemetryRouter;
+
+// DELETE
+router.delete(`${ENDPOINT}/:id`, telemetryController.deleteTelemetry);
+//router.delete(`${ENDPOINT}/devices/:sn`, telemetryController.deleteDeviceTelemetries);
+
+
+export default router;
