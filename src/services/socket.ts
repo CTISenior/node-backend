@@ -12,63 +12,70 @@ const io = new Server(httpServer, {
   }
 });
 
-let consumerObj = {};
+
+let consumer, topic;
 
 io.on('connection', (socket) => {
-  // receive message
+  console.log(`socket_id: ${socket.id}`)
+
   socket.on('telemetry_topic', (arg) => {
-    const topic = arg.toString();
+    topic = arg.toString();
 
     if (topic) {
-      console.log(`connection: ${topic}`);
+      console.log(`kafka_topic: ${topic}`);
 
-      if(!consumerObj[topic]){
-        console.log(`New consumer for topic: ${topic}`);
-        consumerObj[topic] = kafka.consumer({ groupId: `consumer-group_${topic}` });
-        consumerObj[topic].connect() // await 
-        consumerObj[topic].subscribe({ topic, fromBeginning: false });
-      }
+      consumer = kafka.consumer({ groupId: `consumer-group_${socket.id}` });
+      consumer.connect() // await 
+      consumer.subscribe({ topic, fromBeginning: false });
 
       setTimeout(function() {
-        consume(topic).catch(console.error);
+        consume(topic, socket).catch(console.error);
       }, 1000);
+    }
+
+  });
+
+  socket.on("disconnect", () => {
+    console.info(`Client disconnected [socket_id=${socket.id}]`);
+    if(topic){
+      //consumer.pause([{ topic }])
     }
   });
 
-  //https://kafka.js.org/docs/consuming
-
-  const consume = async (topic) => {
-    /*const consumer = kafka.consumer({ groupId: `test-group_${topic}` });
-    await consumer.connect() // await 
-    await consumer.subscribe({ topic, fromBeginning: false });*/
-    consumerObj[topic].run({
-      autoCommit: false,
-      eachMessage: async ({ topic, partition, message }) => {
-        console.log({
-          partition,
-          offset: message.offset,
-          value: message.value.toString(),
-        });
-
-        io.sockets.emit(`telemetry_topic_message-${topic}`, message.value.toString());
-      },
-    });
-    consumerObj[topic].seek({ topic: topic, partition: 0, offset: 12384 })
-    //consumer.pause([{ topic }])
-    //consumer.resume()
-  };
 });
+
+
+const consume = async (topic, socket) => {
+  consumer.run({
+    autoCommit: false,
+    eachMessage: async ({ topic, partition, message }) => {
+      console.log({
+        partition,
+        offset: message.offset,
+        value: message.value.toString(),
+      });
+      
+      socket.emit(`telemetry_topic_message`, message.value.toString());
+    },
+  });
+  consumer.seek({ topic: topic, partition: 0, offset: 12384 })
+};
+
 
 io.on('disconnect', () => {
   console.log('disconnect');
-  consumerObj = {};
+});
+io.on('register', (test) => {
+  console.log('register');
+});
+io.on('unregister', (test) => {
+  console.log('unregister');
 });
 io.on('subscribe', (test) => {
   console.log('subscribe');
 });
 io.on('unsubscribe', (test) => {
   console.log('unsubscribe');
-  consumerObj = {};
 });
 
 
