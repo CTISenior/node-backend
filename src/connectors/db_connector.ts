@@ -6,8 +6,8 @@ dotenv.config();
 // ('sequelize');
 
 export default new Pool({
-  host: process.env.CRDB_HOST,
-  port: process.env.CRDB_PORT,
-  database: process.env.CRDB_DB,
-  user: process.env.CRDB_USER
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  database: process.env.DB_DB,
+  user: process.env.DB_USER
 });
