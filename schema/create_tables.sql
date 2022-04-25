@@ -13,6 +13,8 @@ DROP TABLE IF EXISTS public."tenants";
 CREATE TABLE IF NOT EXISTS public."tenants"
 (
     id UUID DEFAULT gen_random_uuid(),
+    realm_id STRING(255) NOT NULL,
+    client_id STRING(255),
     
     name STRING NOT NULL,
     country STRING(50) NOT NULL,
@@ -30,11 +32,11 @@ CREATE TABLE IF NOT EXISTS public."tenants"
     created_at TIMESTAMP NOT NULL DEFAULT now(),
 
     PRIMARY KEY (id),
-    UNIQUE(name)
+    UNIQUE(realm_id)
 );
 
-INSERT INTO tenants (name, country, city, postcode, address, phone, email) VALUES
-('BilkentUni', 'Turkey', 'Ankara', '06800', 'Bilkent University Campus Cankaya', '+90 312 290 4000', 'mail@bilkent.edu.tr');
+-----INSERT INTO tenants (name, country, city, postcode, address, phone, email) VALUES
+-----('BilkentUni', 'Turkey', 'Ankara', '06800', 'Bilkent University Campus Cankaya', '+90 312 290 4000', 'mail@bilkent.edu.tr');
 
 ----------- assets
 DROP TABLE IF EXISTS public."assets";
@@ -49,7 +51,7 @@ CREATE TABLE IF NOT EXISTS public."assets"
     description TEXT,
     owner STRING(30) NOT NULL DEFAULT 'admin',
 
-    tenant_id STRING(255) NOT NULL DEFAULT 'CTIS',
+    tenant_id STRING(255) NOT NULL DEFAULT 'ctis',
 
     timestamptz TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMP,
@@ -77,7 +79,7 @@ CREATE TABLE IF NOT EXISTS public."devices"
     status BOOL DEFAULT true,
 
     asset_id UUID,
-    tenant_id STRING(255) NOT NULL DEFAULT 'CTIS',
+    tenant_id STRING(255) NOT NULL DEFAULT 'ctis',
     
     timestamptz TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMP,
@@ -117,7 +119,8 @@ CREATE TABLE IF NOT EXISTS public."device_alerts"
     sn STRING NOT NULL,
 
     telemetry_key STRING(50) NOT NULL,
-    type STRING(30) NOT NULL,
+    type STRING(50) NOT NULL,
+    severity STRING(50),
     message TEXT NOT NULL,
     status BOOL NOT NULL DEFAULT false,
 
