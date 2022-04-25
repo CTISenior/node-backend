@@ -43,7 +43,7 @@ export const getAssetAlerts = (req, res) => {
   const assetId = req.params.assetId;
   
   pool.query(
-    'SELECT * FROM device_alerts where asset_id=$1 AND status=false',
+    'SELECT * FROM device_alerts where asset_id=$1 ORDER BY status asc, created_at desc',
     [ assetId ])
     .then(result => { 
       return res
@@ -60,7 +60,7 @@ export const getAssetAlerts = (req, res) => {
 
 export const getAssetTelemetries = (req, res) => {
   const assetId = req.params.assetId
-  const days = req.query.days ? req.query.days : 7; // api/v1/devices/:deviceId/telemetry?days=14
+  const days = req.query.days ? req.query.days : 7; // api/v1/assets/:assetId/telemetry?days=14
   const sortedColumn = req.query.sortedColumn ? req.query.sortedColumn : 'created_at';
   const sorting = req.query.sorting ? req.query.sorting : 'DESC';
 

@@ -29,7 +29,7 @@ export const getDeviceAlerts = (req, res) => {
   const deviceId = req.params.deviceId;
 
   pool.query(
-    'SELECT * FROM device_alerts WHERE device_id=$1',
+    'SELECT * FROM device_alerts WHERE device_id=$1 ORDER BY status asc, created_at desc',
     [ deviceId ])
     .then(result => { 
       return res
