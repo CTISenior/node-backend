@@ -10,12 +10,12 @@ iotwin_backend:
     - "localhost:9092"
     - "localhost:9093"
 
-  crdb_host: localhost
-  crdb_port: 26257
-  crdb_user: "root"
-  crdb_passwod: ""
-  crdb_cert: ""
-  crdb_key: ""
+  db_host: localhost
+  db_port: 26257
+  db_user: "root"
+  db_passwod: ""
+  db_cert: ""
+  db_key: ""
 
   mqtt_host: localhost
   mqtt_port: 1883
