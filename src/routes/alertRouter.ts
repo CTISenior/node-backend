@@ -1,12 +1,8 @@
+import express from 'express';
 import * as alertController from '../controllers/alertController';
 
-import express from 'express';
 const router = express.Router();
-
 const ENDPOINT = '/alerts';
-
-// import verifyAuth from '../middlewares/verifyAuth';
-// router.post('/devices', verifyAuth, alertController.);
 
 // GET
 
