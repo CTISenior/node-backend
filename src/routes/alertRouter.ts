@@ -6,8 +6,8 @@ const ENDPOINT = '/alerts';
 
 // GET
 
-// POST
-router.post(`${ENDPOINT}/:id`, alertController.updateAlertStatus);
+// PUT
+router.put(`${ENDPOINT}/:id`, alertController.updateAlertStatus);
 
 // DELETE
 router.delete(`${ENDPOINT}/:id`, alertController.deleteAlert);
