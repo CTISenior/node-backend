@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS public."assets"
     name STRING NOT NULL,
     city STRING(50) NOT NULL,
     location STRING(255) NOT NULL,
-    coordinates STRING(255),
+    capacity SMALLINT,
     description TEXT,
     owner STRING(30) NOT NULL DEFAULT 'admin',
 
