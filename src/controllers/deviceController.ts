@@ -23,37 +23,18 @@ export const getDevice = (req, res) => {
     })
 };
 
-
-export const getDeviceAlerts = (req, res) => {
-  //const sn = req.params.sn;
-  const deviceId = req.params.deviceId;
-
-  pool.query(
-    'SELECT * FROM device_alerts WHERE device_id=$1 ORDER BY status asc, created_at desc',
-    [ deviceId ])
-    .then(result => { 
-      return res
-        .status(200)
-        .json(result.rows);
-    })
-    .catch(error => { 
-      return res
-        .status(400)
-        .send(`${error}`);
-    })
-};
-
-
-export const getDeviceTelemetries = (req, res) => {
-  //sn
+export const getDeviceTelemetries2 = (req, res) => {
   const deviceId = req.params.deviceId
-  const days = req.query.days ? req.query.days : 7; // api/v1/devices/:deviceId/telemetry?days=14
-  const sortedColumn = req.query.sortedColumn ? req.query.sortedColumn : 'created_at';
-  const sorting = req.query.sorting ? req.query.sorting : 'DESC';
+  const type = req.query.type ? req.query.type : 'temperature';
+  const limit = req.query.limit ? req.query.limit : 1000; // api/v1/devices/:deviceId/telemetry?days=14
 
   pool.query(
-    `SELECT * FROM device_telemetries WHERE device_id=$1 AND (created_at > CURRENT_DATE - ${parseInt(days)}) ORDER BY created_at DESC`, 
-    [ deviceId ])
+`
+SELECT timestamptz as Date, value->>'${type}' as value 
+FROM device_telemetries 
+WHERE device_id=$1 LIMIT $2;
+`, 
+    [ deviceId, limit ])
     .then(result => { 
       return res
         .status(200)
@@ -65,7 +46,6 @@ export const getDeviceTelemetries = (req, res) => {
         .send(`${error}`);
     })
 };
-
 
 export const insertDevice = (req, res) => {
   const {
@@ -73,7 +53,10 @@ export const insertDevice = (req, res) => {
   } = req.body;
 
   pool.query(
-    'INSERT INTO devices (sn, name, protocol, model, types, max_values, description, asset_id, tenant_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
+`
+INSERT INTO devices (sn, name, protocol, model, types, max_values, description, asset_id, tenant_id) 
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9);
+`,
     [ sn, name, protocol, model, types, max_values, description, asset_id, tenant_id ])
     .then(result => { 
       
@@ -101,7 +84,11 @@ export const updateDevice = (req, res) => {
   // const updated_at = Date.now()
 
   pool.query(
-    'UPDATE devices SET name=$1, protocol=$2, model=$3, types=$4, max_values=$5, description=$6, asset_id=$7 WHERE id=$8', 
+`
+UPDATE devices 
+SET name=$1, protocol=$2, model=$3, types=$4, max_values=$5, description=$6, asset_id=$7 
+WHERE id=$8;
+`, 
     [ name, protocol, model, types, max_values, description, asset_id, id ])
     .then(result => { 
       return res
@@ -136,45 +123,6 @@ export const deleteDevice = (req, res) => {
       return res
         .status(200)
         .send(`The device deleted successfully`);
-    })
-    .catch(error => { 
-      return res
-        .status(400)
-        .send(`${error}`);
-    })
-};
-
-
-export const clearDeviceAlerts = (req, res) => {
-  const deviceId = req.params.deviceId;
-
-  pool.query(
-    'UPDATE device_alerts SET status=true WHERE device_id=$1',
-    [ deviceId ])
-    .then(result => { 
-      return res
-        .status(200)
-        .send(`Device alerts cleared successfully`);
-    })
-    .catch(error => { 
-      return res
-        .status(400)
-        .send(`${error}`);
-    })
-};
-
-
-export const deleteDeviceAlerts = (req, res) => {
-  //const sn = req.params.sn;
-  const deviceId = req.params.deviceId;
-
-  pool.query(
-    'DELETE FROM device_alerts WHERE device_id=$1 AND status=true',
-    [ deviceId ])
-    .then(result => { 
-      return res
-        .status(200)
-        .send(`The device alerts deleted successfully`);
     })
     .catch(error => { 
       return res

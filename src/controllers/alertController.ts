@@ -1,5 +1,17 @@
 import pool from '../connectors/db_connector';
 
+export const getEntityAlerts = async (id, days: number, column:string) => {
+  const response = await pool.query(
+`
+SELECT id, telemetry_key, type, message, status, timestamptz, created_At 
+FROM device_alerts 
+WHERE ${column}=$1 AND (created_at > CURRENT_DATE - ${days}) 
+ORDER BY status asc, created_at desc;
+`, 
+[ id ])
+
+  return response.rows;
+};
 
 export const updateAlertStatus = (req, res) => {
   const id = req.params.id;
@@ -40,8 +52,24 @@ export const deleteAlert = (req, res) => {
     })
 };
 
+export const clearActiveAlerts = async (id, column:string) => {
+  const response = await pool.query(
+    `UPDATE device_alerts SET status=true WHERE ${column}=$1`,
+    [ id ]
+  );
+  return response
+};
 
-export const getActiveAlerts = async (id, column:string) => {
+export const deleteClearedAlerts = async (id, column:string) => {
+  const response = await pool.query(
+    `DELETE FROM device_alerts WHERE ${column}=$1 AND status=true`,
+    [ id ]
+  );
+  return response
+};
+
+
+export const getActiveAlertCount = async (id, column:string) => {
   const response = await pool.query(
     `SELECT COUNT(*) as count FROM device_alerts WHERE ${column}=$1 AND status=false`,
     [ id ]

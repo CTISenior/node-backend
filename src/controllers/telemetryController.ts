@@ -2,6 +2,18 @@
 
 import pool from '../connectors/db_connector';
 
+export const getEntityTelemetries = async (id, limit: number, column:string) => {
+  const response = await pool.query(
+`
+SELECT value, created_at, timestamptz 
+FROM device_telemetries 
+WHERE ${column}=$1 
+ORDER BY created_at DESC LIMIT $2;
+`, 
+[ id, limit ])
+
+  return response.rows;
+};
 
 export const deleteTelemetry = (req, res) => {
   const id = req.params.id;
