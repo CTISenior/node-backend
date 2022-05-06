@@ -3,7 +3,7 @@ import pool from '../connectors/db_connector';
 export const getEntityAlerts = async (id, days: number, column:string) => {
   const response = await pool.query(
 `
-SELECT id, telemetry_key, type, message, status, timestamptz, created_At 
+SELECT id, telemetry_key, type, message, status, timestamptz, created_at 
 FROM device_alerts 
 WHERE ${column}=$1 AND (created_at > CURRENT_DATE - ${days}) 
 ORDER BY status asc, created_at desc;
