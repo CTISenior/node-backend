@@ -30,7 +30,7 @@ export const getDeviceTelemetries2 = (req, res) => {
 
   pool.query(
 `
-SELECT timestamptz as Date, value->>'${type}' as value 
+SELECT timestamptz as Date, values->>'${type}' as value
 FROM device_telemetries 
 WHERE device_id=$1 LIMIT $2;
 `, 

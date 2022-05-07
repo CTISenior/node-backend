@@ -3,7 +3,7 @@ import pool from '../connectors/db_connector';
 export const getEntityAlerts = async (id, days: number, column:string) => {
   const response = await pool.query(
 `
-SELECT id, telemetry_key, type, message, status, timestamptz, created_at 
+SELECT id, telemetry_key, telemetry_value, severity_type, severity, message, status, timestamptz, created_at 
 FROM device_alerts 
 WHERE ${column}=$1 AND (created_at > CURRENT_DATE - ${days}) 
 ORDER BY status asc, created_at desc;
@@ -84,19 +84,19 @@ export const getTotalAlerts = async (id, column:string) => {
   SELECT 
   (SELECT COUNT(*)
   FROM device_alerts
-  WHERE ${column}=$1 and created_at > now() - interval '1 days'
+  WHERE ${column}=$1 and timestamptz > now() - interval '1 days'
   ) AS daily_count,
   (SELECT COUNT(*)
   FROM device_alerts
-  WHERE ${column}=$1 and created_at > now() - interval '7 days'
+  WHERE ${column}=$1 and timestamptz > now() - interval '7 days'
   ) AS weekly_count,
   (SELECT COUNT(*)
   FROM device_alerts
-  WHERE ${column}=$1 and created_at > now() - interval '30 days'
+  WHERE ${column}=$1 and timestamptz > now() - interval '30 days'
   ) AS monthly_count,
   (SELECT COUNT(*)
   FROM device_alerts
-  WHERE ${column}=$1 and created_at > now() - interval '365 days'
+  WHERE ${column}=$1 and timestamptz > now() - interval '365 days'
   ) AS yearly_count
     `,
     [ id ]

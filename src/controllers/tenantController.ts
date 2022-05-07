@@ -69,7 +69,7 @@ export const getTenantActiveAlerts = (req, res) => {
 
   pool.query(
 `
-SELECT devices.name as device_name, da.device_id, da.id, da.telemetry_key, da.type, da.message, da.timestamptz, da.created_at
+SELECT devices.name as device_name, da.device_id, da.id, da.telemetry_key, da.telemetry_value, da.severity_type, da.severity, da.message, da.timestamptz, da.created_at
 FROM device_alerts da
 INNER JOIN devices ON devices.id = da.device_id
 WHERE da.tenant_id=$1 AND da.status=false
@@ -111,7 +111,7 @@ WHERE tenant_id=$1
 export const getLatestTenantAlerts = async (tenantId) => {
   const response = await pool.query(
 `
-SELECT devices.name as device_name, da.telemetry_key, da.type, da.message, da.status, da.timestamptz, da.created_at
+SELECT devices.name as device_name, da.telemetry_key, da.telemetry_value, da.severity_type, da.severity, da.message, da.status, da.timestamptz, da.created_at
 FROM device_alerts da
 INNER JOIN devices ON devices.id = da.device_id
 WHERE da.tenant_id=$1
@@ -125,7 +125,7 @@ ORDER BY da.created_at DESC LIMIT 20;
 export const getLatestTenantTelemetries = async (tenantId) => {
   const response = await pool.query(
 `
-SELECT devices.name as device_name, dt.value, dt.timestamptz, dt.created_at
+SELECT devices.name as device_name, dt.values, dt.timestamptz, dt.created_at
 FROM device_telemetries dt
 INNER JOIN devices ON devices.id = dt.device_id
 WHERE dt.tenant_id=$1
