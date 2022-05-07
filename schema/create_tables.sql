@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS public."assets"
     owner STRING(30) NOT NULL DEFAULT 'admin',
 
     tenant_id STRING(255) NOT NULL DEFAULT 'ctis',
-    -----------tenant_id UUID NOT NULL REFERENCES tenants(id)ON DELETE CASCADE,
+    -----------tenant_id UUID NOT NULL REFERENCES tenants(id) ON UPDATE CASCADE ON DELETE CASCADE,
 
     timestamptz TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMP,
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS public."devices"
     status BOOL DEFAULT true,
 
     --------------asset_id UUID,
-    asset_id UUID NOT NULL REFERENCES assets(id)ON DELETE CASCADE,
+    asset_id UUID NOT NULL REFERENCES assets(id) ON UPDATE CASCADE ON DELETE CASCADE
     tenant_id STRING(255) NOT NULL DEFAULT 'ctis',
     
     timestamptz TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS public."device_telemetries"
     id INT DEFAULT unique_rowid(),
     values JSONB NOT NULL,
 
-    -----------device_id UUID NOT NULL REFERENCES devices(id)ON DELETE CASCADE,
+    -----------device_id UUID NOT NULL REFERENCES devices(id) ON DELETE CASCADE,
     device_id UUID,
     asset_id UUID,
     tenant_id STRING,
@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS public."device_alerts"
     message TEXT NOT NULL,
     status BOOL NOT NULL DEFAULT false,
 
-    -----------device_id UUID NOT NULL REFERENCES devices(id)ON DELETE CASCADE,
+    -----------device_id UUID NOT NULL REFERENCES devices(id) ON DELETE CASCADE,
     device_id UUID,
     asset_id UUID,
     tenant_id STRING,
@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS public."tenant_logs"
     id INT DEFAULT unique_rowid(),
     log_msg TEXT NOT NULL,
 
-    -----------tenant_id UUID NOT NULL REFERENCES tenants(id)ON DELETE CASCADE,
+    -----------tenant_id UUID NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
     tenant_id UUID NOT NULL,
     
     timestamptz TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS public."asset_logs"
     id INT DEFAULT unique_rowid(),
     log_msg TEXT NOT NULL,
 
-    -----------asset_id UUID NOT NULL REFERENCES assets(id)ON DELETE CASCADE,
+    -----------asset_id UUID NOT NULL REFERENCES assets(id) ON DELETE CASCADE,
     asset_id UUID NOT NULL,
 
     timestamptz TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS public."device_logs"
     id INT DEFAULT unique_rowid(),
     log_msg TEXT NOT NULL,
 
-    -----------device_id UUID NOT NULL REFERENCES devices(id)ON DELETE CASCADE,
+    -----------device_id UUID NOT NULL REFERENCES devices(id) ON DELETE CASCADE,
     device_id UUID NOT NULL,
 
     timestamptz TIMESTAMPTZ NOT NULL DEFAULT now(),
