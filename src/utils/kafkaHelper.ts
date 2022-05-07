@@ -1,7 +1,6 @@
 import  kafka from '../connectors/kafka_connector';
 
 const admin = kafka.admin();
-const producer = kafka.producer();
 
 // -> Promise
 export const createTopic = async function (topic) {
@@ -26,15 +25,4 @@ export const deleteTopic = async function (topic) {
   // -> Try/Catch
 
   return `Delete Kafka topic: ${result}`;
-};
-
-// -> Promise
-export const writeTelemetry = async function (topic, msg) {
-  await producer.connect();
-  const result = await producer.send({
-    topic,
-    messages: [{ value: msg }],
-  });
-
-  return `Write Topic message: ${result}`;
 };
