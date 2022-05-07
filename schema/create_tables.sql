@@ -47,11 +47,12 @@ CREATE TABLE IF NOT EXISTS public."assets"
     name STRING NOT NULL,
     city STRING(50) NOT NULL,
     location STRING(255) NOT NULL,
-    capacity SMALLINT,
+    coordinates STRING(255),
     description TEXT,
     owner STRING(30) NOT NULL DEFAULT 'admin',
 
     tenant_id STRING(255) NOT NULL DEFAULT 'ctis',
+    -----------tenant_id UUID NOT NULL REFERENCES tenants(id)ON DELETE CASCADE,
 
     timestamptz TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMP,
@@ -73,12 +74,14 @@ CREATE TABLE IF NOT EXISTS public."devices"
     model STRING NOT NULL,
     types STRING[] NOT NULL,
     max_values INT[] NOT NULL,
+    min_values INT[],
     description TEXT NOT NULL,
     owner STRING(30) NOT NULL DEFAULT 'admin',
-    access_token INT,
+    access_token STRING,
     status BOOL DEFAULT true,
 
-    asset_id UUID,
+    --------------asset_id UUID,
+    asset_id UUID NOT NULL REFERENCES assets(id)ON DELETE CASCADE,
     tenant_id STRING(255) NOT NULL DEFAULT 'ctis',
     
     timestamptz TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -88,7 +91,7 @@ CREATE TABLE IF NOT EXISTS public."devices"
     PRIMARY KEY (id),
     UNIQUE (sn)
 );
--------FOREIGN KEY
+
 
 
 ----------- device_telemetries
@@ -96,9 +99,9 @@ DROP TABLE IF EXISTS public."device_telemetries";
 CREATE TABLE IF NOT EXISTS public."device_telemetries"
 (
     id INT DEFAULT unique_rowid(),
-    sn STRING NOT NULL,
-    value JSONB NOT NULL,
+    values JSONB NOT NULL,
 
+    -----------device_id UUID NOT NULL REFERENCES devices(id)ON DELETE CASCADE,
     device_id UUID,
     asset_id UUID,
     tenant_id STRING,
@@ -116,25 +119,24 @@ DROP TABLE IF EXISTS public."device_alerts";
 CREATE TABLE IF NOT EXISTS public."device_alerts"
 (
     id INT DEFAULT unique_rowid(),
-    sn STRING NOT NULL,
 
     telemetry_key STRING(50) NOT NULL,
-    type STRING(50) NOT NULL,
-    severity STRING(50),
+    telemetry_value DECIMAL(10,2) NOT NULL,
+    severity_type STRING(50) NOT NULL,
+    severity STRING(50) NOT NULL,
     message TEXT NOT NULL,
     status BOOL NOT NULL DEFAULT false,
 
+    -----------device_id UUID NOT NULL REFERENCES devices(id)ON DELETE CASCADE,
     device_id UUID,
     asset_id UUID,
     tenant_id STRING,
     
-    timestamp INT NOT NULL,
     timestamptz TIMESTAMPTZ NOT NULL DEFAULT now(),
     created_at timestamp DEFAULT NOW(),
 
     PRIMARY KEY (id)
 );
-
 
 ------------------------------------------------------ LOGS ------------------------------------------------------------------------
 DROP TABLE IF EXISTS public."system_logs";
@@ -156,6 +158,7 @@ CREATE TABLE IF NOT EXISTS public."tenant_logs"
     id INT DEFAULT unique_rowid(),
     log_msg TEXT NOT NULL,
 
+    -----------tenant_id UUID NOT NULL REFERENCES tenants(id)ON DELETE CASCADE,
     tenant_id UUID NOT NULL,
     
     timestamptz TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -171,6 +174,7 @@ CREATE TABLE IF NOT EXISTS public."asset_logs"
     id INT DEFAULT unique_rowid(),
     log_msg TEXT NOT NULL,
 
+    -----------asset_id UUID NOT NULL REFERENCES assets(id)ON DELETE CASCADE,
     asset_id UUID NOT NULL,
 
     timestamptz TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -185,6 +189,7 @@ CREATE TABLE IF NOT EXISTS public."device_logs"
     id INT DEFAULT unique_rowid(),
     log_msg TEXT NOT NULL,
 
+    -----------device_id UUID NOT NULL REFERENCES devices(id)ON DELETE CASCADE,
     device_id UUID NOT NULL,
 
     timestamptz TIMESTAMPTZ NOT NULL DEFAULT now(),
