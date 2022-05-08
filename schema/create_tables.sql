@@ -1,3 +1,5 @@
+----------- CockroachDB
+
 SET sql_safe_updates = FALSE;
 
 USE defaultdb;
@@ -25,7 +27,7 @@ CREATE TABLE IF NOT EXISTS public."tenants"
     email STRING(50) NOT NULL,
     coordinates STRING(255),
     description TEXT,
-    owner STRING(30) DEFAULT 'admin',
+    owner STRING(50) DEFAULT 'admin',
 
     timestamptz TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMP,
@@ -49,7 +51,7 @@ CREATE TABLE IF NOT EXISTS public."assets"
     location STRING(255) NOT NULL,
     capacity DECIMAL(10,2) NOT NULL,
     description TEXT,
-    owner STRING(30) DEFAULT 'admin',
+    owner STRING(50) DEFAULT 'admin',
 
     tenant_id STRING(255) NOT NULL,
     -----------tenant_id UUID NOT NULL REFERENCES tenants(id) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -76,7 +78,7 @@ CREATE TABLE IF NOT EXISTS public."devices"
     max_values INT[] NOT NULL,
     min_values INT[],
     description TEXT,
-    owner STRING(30) DEFAULT 'admin',
+    owner STRING(50) DEFAULT 'admin',
     access_token STRING,
     status BOOL DEFAULT true,
 
