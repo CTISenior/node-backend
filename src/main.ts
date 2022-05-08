@@ -23,22 +23,24 @@ const corsOptions = {
   origin: '*',
 };
 
-const apiLimiter = RateLimit({
+/*const apiLimiter = RateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
   max: 10000, // Limit each IP to 100 requests
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   message: 'Too many requests!',
-});
+});*/
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors(corsOptions));
-app.use(apiLimiter); // apply rate limiter to all requests
+//app.use(apiLimiter); // apply rate limiter to all requests
 app.use((request, response, next) => {
   next();
 });
 
+
+// next -> API Security & Private API (allow mobile app)
 
 // routers
 app.use(ENDPOINT, tenantRouter); // -> middleware
