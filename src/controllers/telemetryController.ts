@@ -5,10 +5,11 @@ import pool from '../connectors/db_connector';
 export const getEntityTelemetries = async (id, limit: number, column:string) => {
   const response = await pool.query(
 `
-SELECT values, created_at, timestamptz 
-FROM device_telemetries 
-WHERE ${column}=$1 
-ORDER BY created_at DESC LIMIT $2;
+SELECT devices.name as device_name, dt.id, dt.values, dt.created_at, dt.timestamptz 
+FROM device_telemetries dt
+INNER JOIN devices ON devices.id = dt.device_id
+WHERE dt.${column}=$1 
+ORDER BY dt.created_at DESC LIMIT $2;
 `, 
 [ id, limit ])
 

@@ -9,7 +9,12 @@ export const getDevice = (req, res) => {
   const id = req.params.id;
 
   pool.query(
-    'SELECT * FROM devices WHERE id=$1', 
+`
+SELECT devices.*, assets.name as asset_name
+FROM devices 
+INNER JOIN assets ON assets.id = devices.asset_id
+WHERE devices.id=$1;
+`, 
     [ id ])
     .then(result => { 
       return res
