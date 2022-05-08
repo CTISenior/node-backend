@@ -34,24 +34,24 @@ export const deleteTelemetry = (req, res) => {
 };
 
 
-export const getAvgTelemetryValue = async (id, column:string, type:string) => {
+export const getAvgTelemetryValue = async (id, column:string, sensorType:string) => {
 
    const response = await pool.query(
     `
 SELECT 
-(SELECT AVG((values->>'${type}')::numeric)
+(SELECT AVG((values->>'${sensorType}')::numeric)
 FROM device_telemetries
 WHERE ${column}=$1 and timestamptz > now() - interval '1 days'  
 ) AS daily_avg,
-(SELECT AVG((values->>'${type}')::numeric)
+(SELECT AVG((values->>'${sensorType}')::numeric)
 FROM device_telemetries
 WHERE ${column}=$1 and timestamptz > now() - interval '7 days'  
 ) AS weekly_avg,
-(SELECT AVG((values->>'${type}')::numeric)
+(SELECT AVG((values->>'${sensorType}')::numeric)
 FROM device_telemetries
 WHERE ${column}=$1 and timestamptz > now() - interval '30 days'  
 ) AS monthly_avg,
-(SELECT AVG((values->>'${type}')::numeric)
+(SELECT AVG((values->>'${sensorType}')::numeric)
 FROM device_telemetries
 WHERE ${column}=$1 and timestamptz > now() - interval '365 days'  
 ) AS yearly_avg
@@ -62,24 +62,24 @@ WHERE ${column}=$1 and timestamptz > now() - interval '365 days'
 };
 
 
-export const getMaxTelemetryValue = async (id, column:string, type:string) => {
+export const getMaxTelemetryValue = async (id, column:string, sensorType:string) => {
 
   const response = await pool.query(
     `
 SELECT 
-(SELECT MAX((values->>'${type}')::numeric)
+(SELECT MAX((values->>'${sensorType}')::numeric)
 FROM device_telemetries
 WHERE ${column}=$1 and timestamptz > now() - interval '1 days'  
 ) AS daily_max,
-(SELECT MAX((values->>'${type}')::numeric)
+(SELECT MAX((values->>'${sensorType}')::numeric)
 FROM device_telemetries
 WHERE ${column}=$1 and timestamptz > now() - interval '7 days'  
 ) AS weekly_max,
-(SELECT MAX((values->>'${type}')::numeric)
+(SELECT MAX((values->>'${sensorType}')::numeric)
 FROM device_telemetries
 WHERE ${column}=$1 and timestamptz > now() - interval '30 days'  
 ) AS monthly_max,
-(SELECT MAX((values->>'${type}')::numeric)
+(SELECT MAX((values->>'${sensorType}')::numeric)
 FROM device_telemetries
 WHERE ${column}=$1 and timestamptz > now() - interval '365 days'  
 ) AS yearly_max

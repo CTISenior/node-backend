@@ -46,9 +46,9 @@ router.get(`${ENDPOINT}/:assetId/telemetry`, async (req, res) => {
 
 router.get(`${ENDPOINT}/:assetId/telemetry/avg`, async (req, res) => {
   const assetId = req.params.assetId
-  const type = req.query.type ? req.query.type : 'temperature'; // api/v1/assets/:assetId/telemetry?type=temperature
+  const sensorType = req.query.sensorType ? req.query.sensorType : ''; // api/v1/assets/:assetId/telemetry?sensorType=temperature
 
-  const result = await getAvgTelemetryValue(assetId, 'asset_id', type+'')
+  const result = await getAvgTelemetryValue(assetId, 'asset_id', sensorType+'')
   
   return res
       .status(200)
@@ -56,9 +56,9 @@ router.get(`${ENDPOINT}/:assetId/telemetry/avg`, async (req, res) => {
 });
 router.get(`${ENDPOINT}/:assetId/telemetry/max`, async (req, res) => {
   const assetId = req.params.assetId
-  const type = req.query.type ? req.query.type : 'temperature'; // api/v1/assets/:assetId/telemetry?type=temperature
+  const sensorType = req.query.sensorType ? req.query.sensorType : ''; // api/v1/assets/:assetId/telemetry?sensorType=temperature
 
-  const result = await getMaxTelemetryValue(assetId, 'asset_id', type+'')
+  const result = await getMaxTelemetryValue(assetId, 'asset_id', sensorType+'')
   
   return res
       .status(200)

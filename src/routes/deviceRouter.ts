@@ -48,9 +48,9 @@ router.get(`${ENDPOINT}/:deviceId/telemetry`, async (req, res) => {
 
 router.get(`${ENDPOINT}/:deviceId/telemetry/avg`, async (req, res) => {
   const deviceId = req.params.deviceId
-  const type = req.query.type ? req.query.type : 'temperature'; // api/v1/devices/:deviceId/telemetry?type=temperature
+  const sensorType = req.query.sensorType ? req.query.sensorType : ''; // api/v1/devices/:deviceId/telemetry?sensorType=temperature
 
-  const result = await getAvgTelemetryValue(deviceId, 'device_id', type+'')
+  const result = await getAvgTelemetryValue(deviceId, 'device_id', sensorType+'')
   
   return res
       .status(200)
@@ -59,9 +59,9 @@ router.get(`${ENDPOINT}/:deviceId/telemetry/avg`, async (req, res) => {
 
 router.get(`${ENDPOINT}/:deviceId/telemetry/max`, async (req, res) => {
   const deviceId = req.params.deviceId
-  const type = req.query.type ? req.query.type : 'temperature'; // api/v1/devices/:deviceId/telemetry?type=temperature
+  const sensorType = req.query.sensorType ? req.query.sensorType : ''; // api/v1/devices/:deviceId/telemetry?sensorType=temperature
 
-  const result = await getMaxTelemetryValue(deviceId, 'device_id', type+'')
+  const result = await getMaxTelemetryValue(deviceId, 'device_id', sensorType+'')
  
   return res
       .status(200)
@@ -95,7 +95,7 @@ router.put(`${ENDPOINT}/:deviceId/alerts`, async (req, res) => {
 });
 
 // DELETE
-router.delete(`${ENDPOINT}/:id.:sn`, deviceController.deleteDevice);
+router.delete(`${ENDPOINT}/:id`, deviceController.deleteDevice);
 router.delete(`${ENDPOINT}/:deviceId/alerts`, async (req, res) => {
   const deviceId = req.params.deviceId
   const response = await deleteClearedAlerts(deviceId, 'device_id');
