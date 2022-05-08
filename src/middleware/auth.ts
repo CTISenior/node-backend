@@ -1,22 +1,14 @@
-// Request'e response vermeden önce auhenticate et. Bu security için uygulanabilir. Sadece keycloak üzerinde kayıtlı olanla kullanıcılar  response alabilir
-// Aynısı "devices" veritabanında gelen Token veya SN/ID ile kayıtlı olan cihazları socket.io ile servis et. Dışarıdan başka cihaz veri  göndermesin
+import jwt from 'jsonwebtoken';
 
-/*
-app.get('/devices', mw.requireAuthentication, (req, res) => {
-        res.send('Devices');
-});
-
-const mw = {
-        requireAuthentication : (req, res, next) => {
-                console.log('Request URL: ' + req.originalUrl);
-                next();
-        },
-        logger : (req, res, next) => {
-                console.log('Time:', Date.now())
-                next();
-        }
-}
-
-module.exports = mw;
-
-*/
+export default (req, res, next) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, 'secret_key');
+    req.userData = decodedToken;
+    next();
+  } catch (error) {
+    return res.status(401).send({
+      message: 'Auth failed',
+    });
+  }
+};
