@@ -1,14 +1,14 @@
 import { v4 as uuid } from 'uuid';
 
 class Asset {
-    id: string = uuid();
-    name: string;
-    city: string;
-    location: string;
-    capacity: string;
-    description: string;
-    owner: string;
-    tenantId: string = uuid(); 
+    private id: string = uuid();
+    private name: string;
+    private city: string;
+    private location: string;
+    private capacity: string;
+    private description: string;
+    private owner: string;
+    private tenantId: string = uuid(); 
 
     constructor(id: string = uuid(), name: string, city: string, location: string, capacity: string, description: string, owner: string, tenantId: string = uuid()) {
         this.id = id;

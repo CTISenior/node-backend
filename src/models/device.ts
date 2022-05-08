@@ -23,7 +23,7 @@ class Device {
     private name: string;
     private model: string;
     private protocol: string;
-    private types: string[];
+    private sensorTypes: string[];
     private maxValues: number[];
     private minValues: number[];
     private description: string;
@@ -36,13 +36,13 @@ class Device {
     private alerts: (Alert)[] = []
 
 
-    constructor(id: string = uuid(), sn: string, name: string, model: string, protocol: string, types: string[], maxValues: number[], minValues: number[], description: string, owner: string, status: boolean, assetId: string = uuid(), tenantId: string = uuid()) {
+    constructor(id: string = uuid(), sn: string, name: string, model: string, protocol: string, sensorTypes: string[], maxValues: number[], minValues: number[], description: string, owner: string, status: boolean, assetId: string = uuid(), tenantId: string = uuid()) {
         this.id = id;
         this.sn = sn;
         this.name = name;
         this.model = model; 
         this.protocol = protocol;
-        this.types = types;
+        this.sensorTypes = sensorTypes;
         this.maxValues = maxValues;
         this.minValues = minValues;
         this.description = description; 

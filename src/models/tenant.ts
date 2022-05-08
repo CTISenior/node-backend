@@ -1,14 +1,14 @@
 import { v4 as uuid } from 'uuid';
 
 class Tenant {
-    id: string = uuid();
-    name: string;
-    country: string;
-    city: string;
-    address: string;
-    postcode: string;
-    email: string;
-    phone: string;
+    private id: string = uuid();
+    private name: string;
+    private country: string;
+    private city: string;
+    private address: string;
+    private postcode: string;
+    private email: string;
+    private phone: string;
 
     constructor(id: string = uuid(), name: string, country: string, city: string, address: string, postcode: string, email: string, phone: string) {
         this.id = id;
