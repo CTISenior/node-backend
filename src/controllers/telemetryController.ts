@@ -39,14 +39,23 @@ extract(day from device_telemetries."timestamptz")
     return response.rows;
 };
 
-export const getChartTelemetries = async (id, days: number, column:string) => {
+export const getChartTelemetries = async (id, sensorType: string, sensorType2: string, days: number, column: string) => {
 
   const response = await pool.query(
 `
-SELECT values, timestamptz 
-FROM device_telemetries  
-WHERE ${column}=$1  AND (timestamptz > CURRENT_DATE - ${days})
-order by timestamptz ASC;
+SELECT AVG((values->>'${sensorType}')::numeric) as ${sensorType},  AVG((values->>'${sensorType2}')::numeric) as ${sensorType2}, 
+extract(year from device_telemetries."timestamptz") || '-' 
+|| extract(month from device_telemetries."timestamptz")  || '-' 
+|| extract(day from device_telemetries."timestamptz")  || ' ' 
+|| extract(hour from device_telemetries."timestamptz")  || ':00:00:000' as date
+
+FROM device_telemetries
+WHERE ${column}=$1 AND (device_telemetries."timestamptz" > CURRENT_DATE - ${days})
+
+GROUP BY extract(year from device_telemetries."timestamptz"),
+extract(month from device_telemetries."timestamptz"),
+extract(day from device_telemetries."timestamptz"),
+extract(hour from device_telemetries."timestamptz");
 `, 
   [ id])
 

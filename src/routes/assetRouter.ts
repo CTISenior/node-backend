@@ -57,14 +57,16 @@ router.get(`${ENDPOINT}/:assetId/telemetry/timeseries`, async (req, res) => {
 
 router.get(`${ENDPOINT}/:assetId/telemetry/chart`, async (req, res) => {
   const assetId = req.params.assetId
-  const daysNum = req.query.days ? req.query.days : 7; // api/v1/assets/:assetId/telemetry/chart?days=14
+  const sensorType = req.query.sensorType ? req.query.sensorType : '';
+  const sensorType2 = req.query.sensorType2 ? req.query.sensorType2 : '';
+  const daysNum = req.query.days ? req.query.days : 7; // api/v1/assets/:assetId/telemetry/chart?sensorType=temperature&days=14
   const day:number = <number> <any> daysNum
   
   return res
     .status(200)
     .json(
       {
-        "chartTelemetries": await getChartTelemetries(assetId, day, 'asset_id'),
+        "chartTelemetries": await getChartTelemetries(assetId, sensorType+'', sensorType2+'', day, 'asset_id'),
       }
     );
 });
