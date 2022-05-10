@@ -1,7 +1,7 @@
 import express from 'express';
 import * as deviceController from '../controllers/deviceController';
 import { getEntityAlerts, clearActiveAlerts, deleteClearedAlerts, getActiveAlertCount, getTotalAlerts } from '../controllers/alertController';
-import { getEntityTelemetries, getAvgTelemetryValue, getMaxTelemetryValue, getTotalTelemetry } from '../controllers/telemetryController';
+import { getEntityTelemetries, getTimeseriesTelemetries, getChartTelemetries, getAvgTelemetryValue, getMaxTelemetryValue, getTotalTelemetry } from '../controllers/telemetryController';
 
 const router = express.Router();
 const ENDPOINT = '/devices';
@@ -11,7 +11,6 @@ const ENDPOINT = '/devices';
 
 // GET
 router.get(`${ENDPOINT}/:id`, deviceController.getDevice);
-router.get(`${ENDPOINT}/:deviceId/telemetry2`, deviceController.getDeviceTelemetries2);
 
 router.get(`${ENDPOINT}/:deviceId/alerts`, async (req, res) => {
   const deviceId = req.params.deviceId
@@ -42,6 +41,34 @@ router.get(`${ENDPOINT}/:deviceId/telemetry`, async (req, res) => {
       {
         "latestTelemetry": await getEntityTelemetries(deviceId, limit, 'device_id'),
         "telemetryCount": await getTotalTelemetry(deviceId, 'device_id'),
+      }
+    );
+});
+
+router.get(`${ENDPOINT}/:deviceId/telemetry/timeseries`, async (req, res) => {
+  const deviceId = req.params.deviceId
+  const sensorType = req.query.sensorType ? req.query.sensorType : '';
+  
+  return res
+    .status(200)
+    .json(
+      {
+        "timeSeriesData": await getTimeseriesTelemetries(deviceId, sensorType+'', 'device_id'),
+      }
+    );
+});
+
+
+router.get(`${ENDPOINT}/:deviceId/telemetry/chart`, async (req, res) => {
+  const deviceId = req.params.deviceId
+  const daysNum = req.query.days ? req.query.days : 7; // api/v1/devices/:deviceId/telemetry/chart?days=14
+  const day:number = <number> <any> daysNum
+  
+  return res
+    .status(200)
+    .json(
+      {
+        "chartTelemetries": await getChartTelemetries(deviceId, day, 'device_id'),
       }
     );
 });

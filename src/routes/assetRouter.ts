@@ -1,7 +1,7 @@
 import express from 'express';
 import * as assetController from '../controllers/assetController';
 import { getEntityAlerts, deleteClearedAlerts, clearActiveAlerts, getActiveAlertCount, getTotalAlerts } from '../controllers/alertController';
-import { getEntityTelemetries, getAvgTelemetryValue, getMaxTelemetryValue, getTotalTelemetry } from '../controllers/telemetryController';
+import { getEntityTelemetries, getTimeseriesTelemetries, getChartTelemetries, getAvgTelemetryValue, getMaxTelemetryValue, getTotalTelemetry } from '../controllers/telemetryController';
 
 const router = express.Router();
 const ENDPOINT = '/assets';
@@ -27,7 +27,7 @@ router.get(`${ENDPOINT}/:assetId/alerts`, async (req, res) => {
 });
 router.get(`${ENDPOINT}/:assetId/telemetry`, async (req, res) => {
   const assetId = req.params.assetId
-  const limitNum = req.query.limit ? req.query.limit : 200; // api/v1/devices/:deviceId/telemetry?limit=200
+  const limitNum = req.query.limit ? req.query.limit : 200; // api/v1/assets/:assetId/telemetry?limit=200
   const limit:number = <number> <any> limitNum
   //const sortedColumn = req.query.sortedColumn ? req.query.sortedColumn : 'created_at';
   //const sorting = req.query.sorting ? req.query.sorting : 'DESC';
@@ -42,7 +42,32 @@ router.get(`${ENDPOINT}/:assetId/telemetry`, async (req, res) => {
     );
 });
 
+router.get(`${ENDPOINT}/:assetId/telemetry/timeseries`, async (req, res) => {
+  const assetId = req.params.assetId
+  const sensorType = req.query.sensorType ? req.query.sensorType : '';
+  
+  return res
+    .status(200)
+    .json(
+      {
+        "timeSeriesData": await getTimeseriesTelemetries(assetId, sensorType+'', 'asset_id'),
+      }
+    );
+});
 
+router.get(`${ENDPOINT}/:assetId/telemetry/chart`, async (req, res) => {
+  const assetId = req.params.assetId
+  const daysNum = req.query.days ? req.query.days : 7; // api/v1/assets/:assetId/telemetry/chart?days=14
+  const day:number = <number> <any> daysNum
+  
+  return res
+    .status(200)
+    .json(
+      {
+        "chartTelemetries": await getChartTelemetries(assetId, day, 'asset_id'),
+      }
+    );
+});
 
 router.get(`${ENDPOINT}/:assetId/telemetry/avg`, async (req, res) => {
   const assetId = req.params.assetId

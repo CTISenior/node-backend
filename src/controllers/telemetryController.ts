@@ -16,6 +16,43 @@ ORDER BY dt.created_at DESC LIMIT $2;
   return response.rows;
 };
 
+export const getTimeseriesTelemetries = async (id, sensorType:string, column:string) => {
+
+  const response = await pool.query(
+`
+SELECT AVG((values->>'${sensorType}')::numeric) as value, 
+
+extract(year from device_telemetries."timestamptz") || '-' 
+|| extract(month from device_telemetries."timestamptz")  || '-' 
+|| extract(day from device_telemetries."timestamptz") as date
+
+FROM device_telemetries
+WHERE ${column}=$1
+
+GROUP BY extract(year from device_telemetries."timestamptz"),
+extract(month from device_telemetries."timestamptz"),
+extract(day from device_telemetries."timestamptz")
+`, 
+    [ id ])
+
+
+    return response.rows;
+};
+
+export const getChartTelemetries = async (id, days: number, column:string) => {
+
+  const response = await pool.query(
+`
+SELECT values, timestamptz 
+FROM device_telemetries  
+WHERE ${column}=$1  AND (timestamptz > CURRENT_DATE - ${days})
+order by timestamptz ASC;
+`, 
+  [ id])
+
+  return response.rows;
+};
+
 export const deleteTelemetry = (req, res) => {
   const id = req.params.id;
 
