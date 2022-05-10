@@ -21,8 +21,10 @@ io.on('connection', (socket) => {
 
     if (arg) {
       topic = arg.toString();
+      //topic = arg.toString() + '';
     }
-    if (topic) {
+
+    if (topic && typeof topic  !== 'undefined') {
       console.log(`kafka_topic: ${topic}`);
 
       consumer = kafka.consumer({ groupId: `consumer-group_${socket.id}` });
