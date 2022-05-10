@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS public."devices"
     model STRING NOT NULL,
     sensor_types STRING[] NOT NULL,
     max_values INT[] NOT NULL,
-    min_values INT[],
+    min_values INT[] NOT NULL,
     description TEXT,
     owner STRING(50) DEFAULT 'admin',
     access_token STRING,
