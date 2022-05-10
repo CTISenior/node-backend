@@ -12,17 +12,16 @@ const io = new Server(httpServer, {
 });
 
 
-let consumer
+let consumer = null
 let topic
 
 io.on('connection', (socket) => {
   console.log(`socket_id: ${socket.id}`)
-
   socket.on('telemetry_topic', (arg) => {
-    if(arg){
+
+    if (arg) {
       topic = arg.toString();
     }
-
     if (topic) {
       console.log(`kafka_topic: ${topic}`);
 
@@ -33,22 +32,15 @@ io.on('connection', (socket) => {
       setTimeout(function () {
         consume(topic, socket).catch(console.error);
       }, 1000);
-    }
-
+    } else
+      consumer.disconnect()
   });
 
   socket.on("disconnect", () => {
+
+
     console.info(`Client disconnected [socket_id=${socket.id}]`);
-    if (topic) {
-      //consumer.pause([{ topic }])
-      //consumer[socket.id].stop()
-
-      // (async () => {
-      // await consumer[socket.id].disconnect()
-      // consumer[socket.id] = null
-      // })();
-
-    }
+    socket.disconnect()
   });
   socket.on("start", (topic) => {
     console.info(`Topic resume again : ${topic}]`);
@@ -62,7 +54,6 @@ io.on('connection', (socket) => {
   });
 });
 
-
 const consume = async (topic, socket) => {
   consumer.run({
     autoCommit: false,
@@ -73,13 +64,13 @@ const consume = async (topic, socket) => {
         offset: message.offset,
         value: message.value.toString(),
       });
-
+      console.log("Socket id is : " + socket.id);
       socket.emit(`telemetry_topic_message`, message.value.toString());
       //socket.broadcast.to(topic).emit(`telemetry_topic_message`, message.value.toString());
       //socket.to(topic).emit(`telemetry_topic_message`, message.value.toString());
     },
   });
-  // consumer.seek({ topic: topic, partition: 0, offset: 12384 })
+  // consumer.seek({ topic:  topic, partition: 0, offset: 12384 })
 };
 
 
