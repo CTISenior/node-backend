@@ -85,19 +85,19 @@ export const getTotalAlerts = async (id, column:string) => {
   SELECT 
   (SELECT COUNT(*)
   FROM device_alerts
-  WHERE ${column}=$1 and timestamptz > now() - interval '1 days'
+  WHERE ${column}=$1 AND (timestamptz > CURRENT_DATE - 1)
   ) AS daily_count,
   (SELECT COUNT(*)
   FROM device_alerts
-  WHERE ${column}=$1 and timestamptz > now() - interval '7 days'
+  WHERE ${column}=$1 AND (timestamptz > CURRENT_DATE - 7)
   ) AS weekly_count,
   (SELECT COUNT(*)
   FROM device_alerts
-  WHERE ${column}=$1 and timestamptz > now() - interval '30 days'
+  WHERE ${column}=$1 AND (timestamptz > CURRENT_DATE - 30)
   ) AS monthly_count,
   (SELECT COUNT(*)
   FROM device_alerts
-  WHERE ${column}=$1 and timestamptz > now() - interval '365 days'
+  WHERE ${column}=$1 AND (timestamptz > CURRENT_DATE - 365)
   ) AS yearly_count
     `,
     [ id ]
