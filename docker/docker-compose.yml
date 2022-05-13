@@ -168,7 +168,7 @@ services:
         ipv4_address: 172.20.0.33
 
   tb-gateway:
-    #restart: always
+    restart: always
     image: 'thingsboard/tb-gateway'
     container_name: tb-gateway
     hostname: tb-gateway
@@ -180,7 +180,7 @@ services:
       - ./tb-gateway/extensions:/thingsboard_gateway/extensions
     networks:
       iotwin-network:
-        ipv4_address: 172.20.0.45
+        ipv4_address: 172.20.0.40
   
   mosquitto_1:
     restart: always
@@ -210,7 +210,7 @@ services:
       #- ./mosquitto/mosquitto-gateway/log:/mosquitto/log
     networks:
       iotwin-network:
-        ipv4_address: 172.20.0.42
+        ipv4_address: 172.20.0.41
   
   crdb_node1:
     restart: always
