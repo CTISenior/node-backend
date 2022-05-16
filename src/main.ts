@@ -8,6 +8,7 @@ import assetRouter from './routes/assetRouter';
 import deviceRouter from './routes/deviceRouter';
 import alertRouter from './routes/alertRouter';
 import telemetryRouter from './routes/telemetryRouter';
+// import keycloak from './middleware/keycloak';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -25,7 +26,7 @@ const corsOptions = {
 
 const apiLimiter = RateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 1000, // Limit each IP to 1000 requests
+  max: 10000, // Limit each IP to 100 requests
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   message: 'Too many requests!',
@@ -41,6 +42,7 @@ app.use((request, response, next) => {
 
 
 // next -> API Security & Private API (allow mobile app)
+// app.use( keycloak.middleware() );
 
 // routers
 app.use(ENDPOINT, tenantRouter); // -> middleware
