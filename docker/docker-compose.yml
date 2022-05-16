@@ -22,6 +22,10 @@ services:
     image: 'wurstmeister/zookeeper:latest'
     container_name: zookeeper1
     hostname: zookeeper1
+    #expose:
+    #    - "2181"
+    #ports:
+    #    - '127.0.0.1:2181:2181'
     ports:
       - '2181:2181'
     environment:
@@ -40,6 +44,10 @@ services:
     image: 'wurstmeister/zookeeper:latest'
     container_name: zookeeper2
     hostname: zookeeper2
+    #expose:
+    #    - "2182"
+    #ports:
+    #    - '127.0.0.1:2182:2182'
     ports:
       - '2182:2182'
     environment:
@@ -58,6 +66,10 @@ services:
     image: 'wurstmeister/zookeeper:latest'
     container_name: zookeeper3
     hostname: zookeeper3
+    #expose:
+    #    - "2183"
+    #ports:
+    #    - '127.0.0.1:2183:2183'
     ports:
       - '2183:2183'
     environment:
@@ -76,6 +88,10 @@ services:
     image: 'wurstmeister/kafka:latest'
     container_name: kafka1
     hostname: kafka1
+    #expose:
+    #    - "9091"
+    #ports:
+    #    - '127.0.0.1:9091:9091'
     ports:
       - '9091:9091'
     environment:
@@ -108,6 +124,10 @@ services:
     image: 'wurstmeister/kafka:latest'
     container_name: kafka2
     hostname: kafka2
+    #expose:
+    #    - "9092"
+    #ports:
+    #    - '127.0.0.1:9092:9092'
     ports:
       - '9092:9092'
     environment:
@@ -140,6 +160,10 @@ services:
     image: 'wurstmeister/kafka:latest'
     container_name: kafka3
     hostname: kafka3
+    #expose:
+    #    - "9093"
+    #ports:
+    #    - '127.0.0.1:9093:9093'
     ports:
       - '9093:9093'
     environment:
@@ -187,6 +211,10 @@ services:
     image: 'eclipse-mosquitto'
     container_name: mqtt
     hostname: mqtt
+    #expose:
+    #    - "1883"
+    #ports:
+    #    - '127.0.0.1:1883:1883'
     ports:
       - 1883:1883
     #volumes:
@@ -220,9 +248,15 @@ services:
     volumes:
         - crdbdata:/cockroach/cockroach-data
     command: start-single-node --insecure
+    #expose:
+    #    - "26257"
+    #    - "8080"
+    #ports:
+    #    - '127.0.0.1:26257:26257'
     ports:
         - "26257:26257"
         - "8088:8080"
+
     networks:
       iotwin-network:
         ipv4_address: 172.20.0.50
@@ -235,8 +269,12 @@ services:
     image: 'postgres'
     container_name: pgsql_keycloak
     hostname: pgsql_keycloak
+    #expose:
+    #    - "5432"
+    #ports:
+    #    - '127.0.0.1:5432:5432'
     ports:
-      - "5433:5433"
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     environment:
@@ -246,22 +284,6 @@ services:
     networks:
       iotwin-network:
         ipv4_address: 172.20.0.55
-  
-  pgadmin:
-    restart: always
-    image: 'dpage/pgadmin4'
-    container_name: pgadmin4
-    hostname: pgadmin4
-    ports:
-      - "8090:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    volumes:
-      - pgadmin:/var/lib/pgadmin
-    networks:
-      iotwin-network:
-        ipv4_address: 172.20.0.56
   
   keycloak:
     restart: always
