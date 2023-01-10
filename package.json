@@ -18,7 +18,7 @@
     "jsonwebtoken": "^8.5.1",
     "kafkajs": "^1.16.0",
     "keycloak-connect": "^18.0.0",
-    "nodemon": "^2.0.15",
+    "nodemon": "^2.0.20",
     "pg": "^8.7.3",
     "socket.io": "^4.4.1",
     "ts-node": "^10.7.0"
