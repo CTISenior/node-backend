@@ -6,4 +6,6 @@
 - Code Revision and Optimization
 - API Security & Private API
 - Advanced Security
+- OOP
+- MVC
 - Testing
