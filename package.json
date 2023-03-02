@@ -17,7 +17,7 @@
     "express-session": "^1.17.3",
     "jsonwebtoken": "^8.5.1",
     "kafkajs": "^1.16.0",
-    "keycloak-connect": "^18.0.0",
+    "keycloak-connect": "^21.0.1",
     "nodemon": "^2.0.20",
     "pg": "^8.7.3",
     "socket.io": "^4.4.1",
